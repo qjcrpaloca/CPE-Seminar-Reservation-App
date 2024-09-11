@@ -72,12 +72,10 @@ def authenticate_admin(username, password):
 st.title('Seminar Reservation App')
 
 # Menu selection
-if st.session_state.menu == "Guest":
-    menu = st.sidebar.radio("Menu", ["Guest"])
-elif st.session_state.menu == "Admin":
-    menu = st.sidebar.radio("Menu", ["Admin"])
+if st.session_state.admin_authenticated:
+    menu = "Admin"
 else:
-    menu = st.sidebar.radio("Menu", ["Guest"])
+    menu = st.sidebar.radio("Menu", ["Guest", "Admin"])
 
 if menu == "Admin":
     if not st.session_state.admin_authenticated:
