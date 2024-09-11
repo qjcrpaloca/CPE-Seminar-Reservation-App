@@ -140,7 +140,7 @@ if menu == "Admin":
     seminar_end_time = st.time_input(":blue[End Time]")
     seminar_location = st.text_input(":blue[Location]")  # Ensure location input is present
     
-    if st.button(":green[CAdd Seminar]"):
+    if st.button(":green[Add Seminar]"):
         add_seminar(seminar_name, seminar_spots, seminar_date, seminar_start_time, seminar_end_time, seminar_location)
     
     # Removing a seminar
@@ -161,7 +161,7 @@ if menu == "Admin":
         st.write(f"Total Reserved Spots: {len(reservations_for_seminar)}")
         st.dataframe(reservations_for_seminar)
     else:
-        st.write(f"No reservations found for seminar '{seminar_to_view}'.")
+        st.write(f":blue[No reservations found for seminar '{seminar_to_view}'.]")
 
 elif menu == "Guest":
     st.header(":blue[Reserve a Spot]")
