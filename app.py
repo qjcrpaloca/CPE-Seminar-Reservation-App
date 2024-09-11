@@ -133,26 +133,26 @@ if menu == "Admin":
     st.header(":blue[CAdmin Panel]")
     
     # Adding a seminar
-    seminar_name = st.text_input("Seminar Name")
-    seminar_spots = st.number_input("Available Spots", min_value=1)
-    seminar_date = st.date_input("Date")
-    seminar_start_time = st.time_input("Start Time")
-    seminar_end_time = st.time_input("End Time")
-    seminar_location = st.text_input("Location")  # Ensure location input is present
+    seminar_name = st.text_input(":blue[Seminar Name]")
+    seminar_spots = st.number_input(":blue[Available Spots]", min_value=1)
+    seminar_date = st.date_input(":blue[Date]")
+    seminar_start_time = st.time_input(":blue[Start Time]")
+    seminar_end_time = st.time_input(":blue[End Time]")
+    seminar_location = st.text_input(":blue[Location]")  # Ensure location input is present
     
     if st.button(":green[CAdd Seminar]"):
         add_seminar(seminar_name, seminar_spots, seminar_date, seminar_start_time, seminar_end_time, seminar_location)
     
     # Removing a seminar
     st.subheader(":blue[CRemove a Seminar]")
-    seminar_to_remove = st.selectbox("Select Seminar to Remove", st.session_state.seminars['Seminar'].tolist())
+    seminar_to_remove = st.selectbox(":blue[Select Seminar to Remove]", st.session_state.seminars['Seminar'].tolist())
     
     if st.button(":green[CRemove Seminar]"):
         remove_seminar(seminar_to_remove)
     
     # Viewing reservations for a seminar
-    st.subheader(":blue[CView Reservations]")
-    seminar_to_view = st.selectbox("Select Seminar to View Reservations", st.session_state.seminars['Seminar'].tolist())
+    st.subheader(":blue[View Reservations]")
+    seminar_to_view = st.selectbox(":blue[Select Seminar to View Reservations]", st.session_state.seminars['Seminar'].tolist())
     
     # Filter reservations for the selected seminar
     reservations_for_seminar = st.session_state.reservations[st.session_state.reservations['Seminar'] == seminar_to_view]
@@ -168,8 +168,8 @@ elif menu == "Guest":
     seminars_list = st.session_state.seminars['Seminar'].tolist()
     seminar_to_reserve = st.selectbox("Choose a Seminar", seminars_list)
     
-    email = st.text_input("Email")
-    student_id = st.text_input("Student ID")
+    email = st.text_input(":blue[Email]")
+    student_id = st.text_input(":blue[Student ID]")
     
     if st.button(":green[Reserve Spot]"):
         if email and student_id:
