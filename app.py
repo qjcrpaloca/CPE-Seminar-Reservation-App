@@ -22,22 +22,22 @@ st.markdown(
     <style>
     /* Change the color of the title */
     .stTitle {
-        color: #FF5733;  /* Use any color you like */
+        color: #000000;  /* Use any color you like */
     }
     
     /* Change the color of all text elements */
     .stText {
-        color: #33FF57;  /* Use any color you like */
+        color: #000000;  /* Use any color you like */
     }
     
     /* Change the color of headers */
     .stHeader {
-        color: #3357FF;  /* Use any color you like */
+        color: #000000;  /* Use any color you like */
     }
     
     /* Customize the color for specific elements if needed */
     .css-1v3fvcr {  /* This class may change; inspect elements to find the current class */
-        color: #FF33A1;
+        color: #000000;
     }
     </style>
     """,
