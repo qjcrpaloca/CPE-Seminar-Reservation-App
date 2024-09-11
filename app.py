@@ -6,6 +6,7 @@ from datetime import datetime
 st.logo('cpelogo.jpg',icon_image='cpelogo.jpg')
 st.sidebar.image('cpe2.png', use_column_width=True)
 st.sidebar.title('CPE Seminar Reservation')
+st.sidebar.divider()
 
 # Define the file paths
 SEMINAR_DATA_FILE = 'seminars.csv'
