@@ -119,6 +119,7 @@ if menu == "Admin":
     seminar_date = st.date_input("Date")
     seminar_start_time = st.time_input("Start Time")
     seminar_end_time = st.time_input("End Time")
+    seminar_location = st.text_input("Location")  # Ensure location input is present
     
     if st.button("Add Seminar"):
         add_seminar(seminar_name, seminar_spots, seminar_date, seminar_start_time, seminar_end_time, seminar_location)
