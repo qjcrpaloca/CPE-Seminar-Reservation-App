@@ -111,7 +111,7 @@ def authenticate_admin(username, password):
     else:
         st.warning('Incorrect username or password.')
 
-st.title('CPE Seminar Reservation')
+st.title(':blueCPE Seminar Reservation')
 st.divider()
 
 # Menu selection
