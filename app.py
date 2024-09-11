@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from datetime import datetime
 
+st.sidebar.title('CPE Seminar Reservation')
 st.logo('cpelogo.jpg',icon_image='cpe.jpg')
 st.sidebar.image('cpe2.png', use_column_width=True)
 
