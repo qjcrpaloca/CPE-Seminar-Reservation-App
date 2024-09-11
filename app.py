@@ -18,7 +18,7 @@ st.markdown(page_bg_img, unsafe_allow_html=True)
 
 st.logo('cpelogo.jpg',icon_image='cpelogo.jpg')
 st.sidebar.image('cpe2.png', use_column_width=True)
-st.sidebar.title('CPE Seminar Reservation')
+st.sidebar.title(':blue[CPE Seminar Reservation]')
 st.sidebar.divider()
 
 # Define the file paths
