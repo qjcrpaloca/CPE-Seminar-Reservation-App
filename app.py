@@ -10,7 +10,7 @@ def load_seminar_data():
     if os.path.exists(SEMINAR_DATA_FILE):
         return pd.read_csv(SEMINAR_DATA_FILE)
     else:
-        return pd.DataFrame(columns=['Seminar', 'Available Spots', 'Reserved Spots', 'Date', 'Time', 'Location'])
+        return pd.DataFrame(columns=['Seminar', 'Available Spots', 'Reserved Spots', 'Date', 'Time', 'Location', 'Reservations'])
 
 # Save seminar data to CSV file
 def save_seminar_data(data):
@@ -25,7 +25,7 @@ if 'admin_authenticated' not in st.session_state:
 
 def add_seminar(name, spots, date, time, location):
     if name and spots > 0:
-        new_seminar = pd.DataFrame([[name, spots, 0, date, time, location]], columns=['Seminar', 'Available Spots', 'Reserved Spots', 'Date', 'Time', 'Location'])
+        new_seminar = pd.DataFrame([[name, spots, 0, date, time, location, '']], columns=['Seminar', 'Available Spots', 'Reserved Spots', 'Date', 'Time', 'Location', 'Reservations'])
         st.session_state.seminars = pd.concat([st.session_state.seminars, new_seminar], ignore_index=True)
         save_seminar_data(st.session_state.seminars)
         st.success(f'Seminar "{name}" added successfully!')
@@ -40,7 +40,14 @@ def reserve_spot(name, email, student_id):
     if not idx.empty:
         idx = idx[0]
         if st.session_state.seminars.at[idx, 'Available Spots'] > st.session_state.seminars.at[idx, 'Reserved Spots']:
+            # Update reservation information
+            reservations = st.session_state.seminars.at[idx, 'Reservations']
+            if reservations:
+                reservations += f"; {email} (ID: {student_id})"
+            else:
+                reservations = f"{email} (ID: {student_id})"
             st.session_state.seminars.at[idx, 'Reserved Spots'] += 1
+            st.session_state.seminars.at[idx, 'Reservations'] = reservations
             save_seminar_data(st.session_state.seminars)
             st.success(f'Reserved a spot for seminar "{name}" for {email} (ID: {student_id})!')
         else:
