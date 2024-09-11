@@ -16,6 +16,34 @@ background-attachment: local;
 '''
 st.markdown(page_bg_img, unsafe_allow_html=True)
 
+# Set up custom CSS for font colors
+st.markdown(
+    """
+    <style>
+    /* Change the color of the title */
+    .stTitle {
+        color: #FF5733;  /* Use any color you like */
+    }
+    
+    /* Change the color of all text elements */
+    .stText {
+        color: #33FF57;  /* Use any color you like */
+    }
+    
+    /* Change the color of headers */
+    .stHeader {
+        color: #3357FF;  /* Use any color you like */
+    }
+    
+    /* Customize the color for specific elements if needed */
+    .css-1v3fvcr {  /* This class may change; inspect elements to find the current class */
+        color: #FF33A1;
+    }
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.logo('cpelogo.jpg',icon_image='cpelogo.jpg')
 st.sidebar.image('cpe2.png', use_column_width=True)
 st.sidebar.title('CPE Seminar Reservation')
