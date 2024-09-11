@@ -178,7 +178,7 @@ elif menu == "Guest":
             st.warning('Please enter both email and student ID.')
 
     st.divider()
-    st.subheader("Current Seminars")
+    st.subheader(":red[Current Seminars]")
     seminars_df = st.session_state.seminars.copy()
     seminars_df['Start Time'] = pd.to_datetime(seminars_df['Start Time'], format='%H:%M:%S').apply(format_time_12h)
     seminars_df['End Time'] = pd.to_datetime(seminars_df['End Time'], format='%H:%M:%S').apply(format_time_12h)
