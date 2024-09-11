@@ -86,7 +86,6 @@ def reserve_spot(name, email, student_id):
             st.warning(f'No available spots for seminar "{name}".')
     else:
         st.warning(f'Seminar "{name}" not found.')
-    st.divider()
 
 def authenticate_admin(username, password):
     # Example credentials
