@@ -124,6 +124,10 @@ if menu == "Admin":
     st.subheader("View Reservations")
     seminar_to_view = st.selectbox("Select Seminar to View Reservations", st.session_state.seminars['Seminar'].tolist())
     
+    # Debugging: Print reservation data
+    st.write("Reservation Data:")
+    st.write(st.session_state.reservations)
+    
     reservations_for_seminar = st.session_state.reservations[st.session_state.reservations['Seminar'] == seminar_to_view]
     
     if not reservations_for_seminar.empty:
