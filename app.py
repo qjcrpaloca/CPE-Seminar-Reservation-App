@@ -11,7 +11,7 @@ def load_seminar_data():
     if os.path.exists(SEMINAR_DATA_FILE):
         return pd.read_csv(SEMINAR_DATA_FILE)
     else:
-        return pd.DataFrame(columns=['Seminar', 'Available Spots', 'Reserved Spots', 'Date', 'Time', 'Location'])
+        return pd.DataFrame(columns=['Seminar', 'Available Spots', 'Reserved Spots', 'Date', 'Start Time', 'End Time', 'Location'])
 
 # Load reservation data from CSV file
 def load_reservation_data():
@@ -41,9 +41,9 @@ if 'admin_authenticated' not in st.session_state:
 if 'menu' not in st.session_state:
     st.session_state.menu = "Guest"  # Default to Guest view
 
-def add_seminar(name, spots, date, time, location):
+def add_seminar(name, spots, date, start_time, end_time, location):
     if name and spots > 0:
-        new_seminar = pd.DataFrame([[name, spots, 0, date, time, location]], columns=['Seminar', 'Available Spots', 'Reserved Spots', 'Date', 'Time', 'Location'])
+        new_seminar = pd.DataFrame([[name, spots, 0, date, start_time, end_time, location]], columns=['Seminar', 'Available Spots', 'Reserved Spots', 'Date', 'Start Time', 'End Time', 'Location'])
         st.session_state.seminars = pd.concat([st.session_state.seminars, new_seminar], ignore_index=True)
         save_seminar_data(st.session_state.seminars)
         st.success(f'Seminar "{name}" added successfully!')
@@ -107,11 +107,12 @@ if menu == "Admin":
     seminar_name = st.text_input("Seminar Name")
     seminar_spots = st.number_input("Available Spots", min_value=1)
     seminar_date = st.date_input("Date")
-    seminar_time = st.time_input("Time")
+    seminar_start_time = st.time_input("Start Time")
+    seminar_end_time = st.time_input("End Time")
     seminar_location = st.text_input("Location")
     
     if st.button("Add Seminar"):
-        add_seminar(seminar_name, seminar_spots, seminar_date, seminar_time, seminar_location)
+        add_seminar(seminar_name, seminar_spots, seminar_date, seminar_start_time, seminar_end_time, seminar_location)
     
     # Removing a seminar
     st.subheader("Remove a Seminar")
