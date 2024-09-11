@@ -122,15 +122,15 @@ else:
 
 if menu == "Admin":
     if not st.session_state.admin_authenticated:
-        st.header(":blue[CAdmin Login]")
-        username = st.text_input(":blue[CUsername]")
-        password = st.text_input(":blue[CPassword]", type='password')
+        st.header(":blue[Admin Login]")
+        username = st.text_input(":blue[Username]")
+        password = st.text_input(":blue[Password]", type='password')
         
         if st.button(":green[Login]"):
             authenticate_admin(username, password)
         st.stop()
     
-    st.header(":blue[CAdmin Panel]")
+    st.header(":blue[Admin Panel]")
     
     # Adding a seminar
     seminar_name = st.text_input(":blue[Seminar Name]")
@@ -144,10 +144,10 @@ if menu == "Admin":
         add_seminar(seminar_name, seminar_spots, seminar_date, seminar_start_time, seminar_end_time, seminar_location)
     
     # Removing a seminar
-    st.subheader(":blue[CRemove a Seminar]")
+    st.subheader(":blue[Remove a Seminar]")
     seminar_to_remove = st.selectbox(":blue[Select Seminar to Remove]", st.session_state.seminars['Seminar'].tolist())
     
-    if st.button(":green[CRemove Seminar]"):
+    if st.button(":green[Remove Seminar]"):
         remove_seminar(seminar_to_remove)
     
     # Viewing reservations for a seminar
