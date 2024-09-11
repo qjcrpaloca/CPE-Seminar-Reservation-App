@@ -10,7 +10,7 @@ background-image: url("https://scontent.fcrk3-2.fna.fbcdn.net/v/t39.30808-6/4558
 background-size: cover;
 background-position: center;
 background-repeat: no-repeat;
-background-attachment: fixed;
+background-attachment: scroll;
 }
 </style>
 '''
