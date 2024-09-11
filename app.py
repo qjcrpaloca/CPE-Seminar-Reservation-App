@@ -162,4 +162,6 @@ elif menu == "Guest":
     seminars_df = st.session_state.seminars.copy()
     seminars_df['Start Time'] = pd.to_datetime(seminars_df['Start Time'], format='%H:%M:%S').apply(format_time_12h)
     seminars_df['End Time'] = pd.to_datetime(seminars_df['End Time'], format='%H:%M:%S').apply(format_time_12h)
+    seminars_df = seminars_df.drop(columns=['Time''Reservations'])
+    st.dataframe(seminars_df)
     st.dataframe(seminars_df)
