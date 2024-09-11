@@ -1,54 +1,70 @@
 import streamlit as st
-import pandas as pd
-import requests as rs
+import gspread
+from oauth2client.service_account import ServiceAccountCredentials
+import streamlit_authenticator as stauth
+import bcrypt
 
-st.title('Amazing User Login App')
+# --- SET UP GOOGLE SHEET ACCESS ---
+scope = ["https://spreadsheets.google.com/feeds", "https://www.googleapis.com/auth/drive"]
+creds = ServiceAccountCredentials.from_json_keyfile_name("service_account.json", scope)
+client = gspread.authorize(creds)
 
-sheet_csv = st.secrets["database_url"]
-res = rs.get(url=sheet_csv)
-open('database.csv', 'wb').write(res.content)
-database = pd.read_csv('database.csv', header=0)
+# Open the Google Sheet
+sheet = client.open("YourGoogleSheetName").sheet1
 
-# Create user_state
-if 'user_state' not in st.session_state:
-    st.session_state.user_state = {
-        'name_surname': '',
-        'password': '',
-        'logged_in': False,
-        'user_type': '',
-        'mail_adress': '',
-        'fixed_user_message': ''
+# Fetch all users data
+users_data = sheet.get_all_records()
+
+# Convert the Google Sheet data to the format needed by streamlit_authenticator
+credentials = {'usernames': {}}
+
+for user in users_data:
+    credentials['usernames'][user['username']] = {
+        'password': user['password'],  # Store hashed passwords in the Google Sheet
+        'name': user['name']
     }
 
-if not st.session_state.user_state['logged_in']:
-    # Create login form
-    st.write('Please login')
-    mail_adress = st.text_input('E-Mail')
-    password = st.text_input('Password', type='password')
-    submit = st.button('Login')
+# --- STREAMLIT AUTHENTICATION ---
+authenticator = stauth.Authenticate(
+    credentials,
+    'some_cookie_name',    # Replace with your cookie name
+    'some_cookie_key',     # Replace with your cookie key
+    30  # Cookie expiry days
+)
 
-    # Check if user is logged in
-    if submit:
-        user_ = database[database['mail_adress'] == mail_adress].copy()
-        if len(user_) == 0:
-            st.error('User not found')
-        else:
-            if user_['mail_adress'].values[0] == mail_adress and user_['password'].values[0] == password:
-                st.session_state.user_state['mail_adress'] = mail_adress
-                st.session_state.user_state['password'] = password
-                st.session_state.user_state['logged_in'] = True
-                st.session_state.user_state['user_type'] = user_['user_type'].values[0]
-                st.session_state.user_state['mail_adress'] = user_['mail_adress'].values[0]
-                st.session_state.user_state['fixed_user_message'] = user_['fixed_user_message'].values[0]
-                st.write('You are logged in')
-                st.rerun()
-            else:
-                st.write('Invalid username or password')
-elif st.session_state.user_state['logged_in']:
-    st.write('Welcome to the app')
-    st.write('You are logged in as:', st.session_state.user_state['mail_adress'])
-    st.write('You are a:', st.session_state.user_state['user_type'])
-    st.write('Your fixed user message:', st.session_state.user_state['fixed_user_message'])
-    if st.session_state.user_state['user_type'] == 'admin':
-        st.write('You have admin rights. Here is the database')
-        st.table(database)
+# --- LOGIN ---
+name, authentication_status, username = authenticator.login("Login", "main")
+
+if authentication_status:
+    st.sidebar.success(f"Welcome, {name}")
+    
+    if username == "admin":  # Admin-specific access
+        st.title("Admin Dashboard")
+        st.write("This section is only accessible to admin.")
+    else:
+        st.title(f"User Dashboard")
+        st.write(f"Hello {name}, you are logged in as a user.")
+        
+elif authentication_status is False:
+    st.sidebar.error("Username/password is incorrect")
+elif authentication_status is None:
+    st.sidebar.info("Please enter your username and password")
+
+# --- SIGNUP ---
+if st.sidebar.checkbox('Sign up'):
+    st.subheader("Create a new account")
+
+    new_username = st.text_input("Username")
+    new_password = st.text_input("Password", type="password")
+    new_name = st.text_input("Name")
+    role = st.selectbox("Role", options=["User", "Admin"])
+
+    if st.button("Sign up"):
+        hashed_password = bcrypt.hashpw(new_password.encode(), bcrypt.gensalt()).decode()
+        # Add new user to the Google Sheet
+        sheet.append_row([new_username, hashed_password, new_name, role])
+        st.write(f"New account created for {new_name} as {role}")
+
+# --- LOGOUT ---
+if st.sidebar.button('Logout'):
+    authenticator.logout("Logout", "sidebar")
