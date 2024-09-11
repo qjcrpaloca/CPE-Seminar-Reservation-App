@@ -4,6 +4,7 @@ import pandas as pd
 # Initialize session state for seminar data and authentication
 if 'seminars' not in st.session_state:
     st.session_state.seminars = pd.DataFrame(columns=['Seminar', 'Available Spots', 'Reserved Spots'])
+    st.session_state.reservations = pd.DataFrame(columns=['Seminar', 'Email', 'Student ID'])
 
 if 'admin_authenticated' not in st.session_state:
     st.session_state.admin_authenticated = False
@@ -14,13 +15,15 @@ def add_seminar(name, spots):
         st.session_state.seminars = pd.concat([st.session_state.seminars, new_seminar], ignore_index=True)
         st.success(f'Seminar "{name}" added successfully!')
 
-def reserve_spot(name):
+def reserve_spot(name, email, student_id):
     idx = st.session_state.seminars[st.session_state.seminars['Seminar'] == name].index
     if not idx.empty:
         idx = idx[0]
         if st.session_state.seminars.at[idx, 'Available Spots'] > st.session_state.seminars.at[idx, 'Reserved Spots']:
             st.session_state.seminars.at[idx, 'Reserved Spots'] += 1
-            st.success(f'Reserved a spot for seminar "{name}"!')
+            new_reservation = pd.DataFrame([[name, email, student_id]], columns=['Seminar', 'Email', 'Student ID'])
+            st.session_state.reservations = pd.concat([st.session_state.reservations, new_reservation], ignore_index=True)
+            st.success(f'Reserved a spot for seminar "{name}" for {email}!')
         else:
             st.warning(f'No available spots for seminar "{name}".')
     else:
@@ -64,9 +67,15 @@ elif menu == "Guest":
     st.header("Reserve a Spot")
     seminars_list = st.session_state.seminars['Seminar'].tolist()
     seminar_to_reserve = st.selectbox("Choose a Seminar", seminars_list)
-
+    
+    email = st.text_input("Your Email")
+    student_id = st.text_input("Your Student ID")
+    
     if st.button("Reserve Spot"):
-        reserve_spot(seminar_to_reserve)
+        if email and student_id:
+            reserve_spot(seminar_to_reserve, email, student_id)
+        else:
+            st.warning('Please provide both your email and student ID.')
     
     st.subheader("Current Seminars")
     st.dataframe(st.session_state.seminars)
