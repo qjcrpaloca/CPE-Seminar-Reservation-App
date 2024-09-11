@@ -42,13 +42,18 @@ if 'admin_authenticated' not in st.session_state:
 if 'menu' not in st.session_state:
     st.session_state.menu = "Guest"  # Default to Guest view
 
-def format_time(time):
-    """Format 24-hour time to 12-hour AM/PM format."""
+def format_time_12h(time):
+    """Convert 24-hour time to 12-hour AM/PM format."""
     return time.strftime("%I:%M %p")
 
 def add_seminar(name, spots, date, start_time, end_time, location):
     if name and spots > 0:
-        new_seminar = pd.DataFrame([[name, spots, 0, date, start_time, end_time, location]], columns=['Seminar', 'Available Spots', 'Reserved Spots', 'Date', 'Start Time', 'End Time', 'Location'])
+        # Convert times to 24-hour format for storage
+        start_time_24 = start_time.strftime('%H:%M:%S')
+        end_time_24 = end_time.strftime('%H:%M:%S')
+        
+        new_seminar = pd.DataFrame([[name, spots, 0, date, start_time_24, end_time_24, location]], 
+                                   columns=['Seminar', 'Available Spots', 'Reserved Spots', 'Date', 'Start Time', 'End Time', 'Location'])
         st.session_state.seminars = pd.concat([st.session_state.seminars, new_seminar], ignore_index=True)
         save_seminar_data(st.session_state.seminars)
         st.success(f'Seminar "{name}" added successfully!')
@@ -114,10 +119,6 @@ if menu == "Admin":
     seminar_date = st.date_input("Date")
     seminar_start_time = st.time_input("Start Time")
     seminar_end_time = st.time_input("End Time")
-    seminar_location = st.text_input("Location")
-    
-    formatted_start_time = format_time(seminar_start_time)
-    formatted_end_time = format_time(seminar_end_time)
     
     if st.button("Add Seminar"):
         add_seminar(seminar_name, seminar_spots, seminar_date, seminar_start_time, seminar_end_time, seminar_location)
@@ -157,4 +158,7 @@ elif menu == "Guest":
             st.warning('Please enter both email and student ID.')
     
     st.subheader("Current Seminars")
-    st.dataframe(st.session_state.seminars)
+    seminars_df = st.session_state.seminars.copy()
+    seminars_df['Start Time'] = pd.to_datetime(seminars_df['Start Time'], format='%H:%M:%S').apply(format_time_12h)
+    seminars_df['End Time'] = pd.to_datetime(seminars_df['End Time'], format='%H:%M:%S').apply(format_time_12h)
+    st.dataframe(seminars_df)
