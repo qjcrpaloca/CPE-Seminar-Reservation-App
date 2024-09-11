@@ -166,7 +166,7 @@ if menu == "Admin":
 elif menu == "Guest":
     st.header("Reserve a Spot")
     seminars_list = st.session_state.seminars['Seminar'].tolist()
-    seminar_to_reserve = st.selectbox("Choose a Seminar", seminars_list)
+    seminar_to_reserve = st.selectbox(":red[Choose a Seminar]", seminars_list)
     
     email = st.text_input("Email")
     student_id = st.text_input("Student ID")
