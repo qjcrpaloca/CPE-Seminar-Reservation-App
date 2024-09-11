@@ -1,9 +1,12 @@
 import streamlit as st
 import pandas as pd
 
-# Initialize session state for seminar data
+# Initialize session state for seminar data and authentication
 if 'seminars' not in st.session_state:
     st.session_state.seminars = pd.DataFrame(columns=['Seminar', 'Available Spots', 'Reserved Spots'])
+
+if 'admin_authenticated' not in st.session_state:
+    st.session_state.admin_authenticated = False
 
 def add_seminar(name, spots):
     if name and spots > 0:
@@ -23,11 +26,30 @@ def reserve_spot(name):
     else:
         st.warning(f'Seminar "{name}" not found.')
 
+def authenticate_admin(username, password):
+    # Example credentials
+    correct_username = 'admin'
+    correct_password = 'password'
+    if username == correct_username and password == correct_password:
+        st.session_state.admin_authenticated = True
+        st.success('Authenticated successfully!')
+    else:
+        st.warning('Incorrect username or password.')
+
 st.title('Seminar Reservation App')
 
 menu = st.sidebar.radio("Menu", ["Admin", "Guest"])
 
 if menu == "Admin":
+    if not st.session_state.admin_authenticated:
+        st.header("Admin Login")
+        username = st.text_input("Username")
+        password = st.text_input("Password", type='password')
+        
+        if st.button("Login"):
+            authenticate_admin(username, password)
+        st.stop()
+    
     st.header("Admin Panel")
     seminar_name = st.text_input("Seminar Name")
     seminar_spots = st.number_input("Available Spots", min_value=1)
