@@ -1,10 +1,24 @@
 import streamlit as st
 import pandas as pd
+import os
+
+# Define the file path for storing seminar data
+SEMINAR_DATA_FILE = 'seminars.csv'
+
+# Load seminar data from CSV file
+def load_seminar_data():
+    if os.path.exists(SEMINAR_DATA_FILE):
+        return pd.read_csv(SEMINAR_DATA_FILE)
+    else:
+        return pd.DataFrame(columns=['Seminar', 'Available Spots', 'Reserved Spots'])
+
+# Save seminar data to CSV file
+def save_seminar_data(data):
+    data.to_csv(SEMINAR_DATA_FILE, index=False)
 
 # Initialize session state for seminar data and authentication
 if 'seminars' not in st.session_state:
-    st.session_state.seminars = pd.DataFrame(columns=['Seminar', 'Available Spots', 'Reserved Spots'])
-    st.session_state.reservations = pd.DataFrame(columns=['Seminar', 'Email', 'Student ID'])
+    st.session_state.seminars = load_seminar_data()
 
 if 'admin_authenticated' not in st.session_state:
     st.session_state.admin_authenticated = False
@@ -13,6 +27,7 @@ def add_seminar(name, spots):
     if name and spots > 0:
         new_seminar = pd.DataFrame([[name, spots, 0]], columns=['Seminar', 'Available Spots', 'Reserved Spots'])
         st.session_state.seminars = pd.concat([st.session_state.seminars, new_seminar], ignore_index=True)
+        save_seminar_data(st.session_state.seminars)
         st.success(f'Seminar "{name}" added successfully!')
 
 def reserve_spot(name, email, student_id):
@@ -21,9 +36,8 @@ def reserve_spot(name, email, student_id):
         idx = idx[0]
         if st.session_state.seminars.at[idx, 'Available Spots'] > st.session_state.seminars.at[idx, 'Reserved Spots']:
             st.session_state.seminars.at[idx, 'Reserved Spots'] += 1
-            new_reservation = pd.DataFrame([[name, email, student_id]], columns=['Seminar', 'Email', 'Student ID'])
-            st.session_state.reservations = pd.concat([st.session_state.reservations, new_reservation], ignore_index=True)
-            st.success(f'Reserved a spot for seminar "{name}" for {email}!')
+            save_seminar_data(st.session_state.seminars)
+            st.success(f'Reserved a spot for seminar "{name}" for {email} (ID: {student_id})!')
         else:
             st.warning(f'No available spots for seminar "{name}".')
     else:
@@ -68,14 +82,14 @@ elif menu == "Guest":
     seminars_list = st.session_state.seminars['Seminar'].tolist()
     seminar_to_reserve = st.selectbox("Choose a Seminar", seminars_list)
     
-    email = st.text_input("Your Email")
-    student_id = st.text_input("Your Student ID")
+    email = st.text_input("Email")
+    student_id = st.text_input("Student ID")
     
     if st.button("Reserve Spot"):
         if email and student_id:
             reserve_spot(seminar_to_reserve, email, student_id)
         else:
-            st.warning('Please provide both your email and student ID.')
+            st.warning('Please enter both email and student ID.')
     
     st.subheader("Current Seminars")
     st.dataframe(st.session_state.seminars)
