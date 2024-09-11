@@ -3,7 +3,7 @@ import pandas as pd
 import os
 from datetime import datetime
 
-st.logo("cpe1.jpg")
+st.logo("cpe.jpg",icon_image="cpe.jpg")
 
 # Define the file paths
 SEMINAR_DATA_FILE = 'seminars.csv'
