@@ -3,22 +3,15 @@ import pandas as pd
 import os
 from datetime import datetime
 
-# Define the path to your image file
-image_path = 'cpe.jpg'
-
-# Set up custom CSS
-st.markdown(
-    f"""
-    <style>
-    .stApp {{
-        background-image: url({image_path});
-        background-size: cover;
-        background-position: center;
-    }}
-    </style>
-    """,
-    unsafe_allow_html=True
-)
+page_bg_img = '''
+<style>
+.main {
+background-image: url("https://static.vecteezy.com/system/resources/previews/034/346/838/non_2x/different-colored-recycle-waste-bins-illustration-waste-types-segregation-recycling-vector.jpg");
+background-size: cover;
+}
+</style>
+'''
+st.markdown(page_bg_img, unsafe_allow_html=True)
 
 st.logo('cpelogo.jpg',icon_image='cpelogo.jpg')
 st.sidebar.image('cpe2.png', use_column_width=True)
