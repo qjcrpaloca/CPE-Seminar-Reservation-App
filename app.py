@@ -4,7 +4,7 @@ import os
 from datetime import datetime
 
 st.sidebar.image('cpeeee.jpg', use_column_width=True)
-#st.logo("cpeeee.jpg",icon_image="cpe.jpg")
+st.logo("cpe.jpg",icon_image="cpe.jpg")
 
 # Define the file paths
 SEMINAR_DATA_FILE = 'seminars.csv'
