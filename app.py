@@ -111,7 +111,7 @@ def authenticate_admin(username, password):
     else:
         st.warning('Incorrect username or password.')
 
-st.title(':red[CPE Seminar Reservation]')
+st.title('CPE Seminar Reservation')
 st.divider()
 
 # Menu selection
@@ -166,19 +166,19 @@ if menu == "Admin":
 elif menu == "Guest":
     st.header(":red[Reserve a Spot]")
     seminars_list = st.session_state.seminars['Seminar'].tolist()
-    seminar_to_reserve = st.selectbox(":red[Choose a Seminar]", seminars_list)
+    seminar_to_reserve = st.selectbox("Choose a Seminar", seminars_list)
     
     email = st.text_input("Email")
     student_id = st.text_input("Student ID")
     
-    if st.button(":red[Reserve Spot]"):
+    if st.button(":green[Reserve Spot]"):
         if email and student_id:
             reserve_spot(seminar_to_reserve, email, student_id)
         else:
             st.warning('Please enter both email and student ID.')
 
     st.divider()
-    st.subheader(":red[Current Seminars]")
+    st.subheader("Current Seminars")
     seminars_df = st.session_state.seminars.copy()
     seminars_df['Start Time'] = pd.to_datetime(seminars_df['Start Time'], format='%H:%M:%S').apply(format_time_12h)
     seminars_df['End Time'] = pd.to_datetime(seminars_df['End Time'], format='%H:%M:%S').apply(format_time_12h)
