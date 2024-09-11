@@ -164,14 +164,14 @@ if menu == "Admin":
         st.write(f"No reservations found for seminar '{seminar_to_view}'.")
 
 elif menu == "Guest":
-    st.header("Reserve a Spot")
+    st.header(":red[Reserve a Spot]")
     seminars_list = st.session_state.seminars['Seminar'].tolist()
     seminar_to_reserve = st.selectbox(":red[Choose a Seminar]", seminars_list)
     
     email = st.text_input("Email")
     student_id = st.text_input("Student ID")
     
-    if st.button("Reserve Spot"):
+    if st.button(":red[Reserve Spot]"):
         if email and student_id:
             reserve_spot(seminar_to_reserve, email, student_id)
         else:
