@@ -124,13 +124,11 @@ if menu == "Admin":
     st.subheader("View Reservations")
     seminar_to_view = st.selectbox("Select Seminar to View Reservations", st.session_state.seminars['Seminar'].tolist())
     
-    # Debugging: Print reservation data
-    st.write("Reservation Data:")
-    st.write(st.session_state.reservations)
-    
+    # Filter reservations for the selected seminar
     reservations_for_seminar = st.session_state.reservations[st.session_state.reservations['Seminar'] == seminar_to_view]
     
     if not reservations_for_seminar.empty:
+        st.write(f"Total Reserved Spots: {len(reservations_for_seminar)}")
         st.dataframe(reservations_for_seminar)
     else:
         st.write(f"No reservations found for seminar '{seminar_to_view}'.")
