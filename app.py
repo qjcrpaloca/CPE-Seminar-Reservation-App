@@ -84,6 +84,18 @@ def remove_seminar(name):
     st.success(f'Seminar "{name}" removed successfully!')
 
 def reserve_spot(name, email, student_id):
+    # Check if the user has already reserved a spot for this seminar
+    already_reserved = st.session_state.reservations[
+        (st.session_state.reservations['Seminar'] == name) & 
+        ((st.session_state.reservations['Email'] == email) | 
+         (st.session_state.reservations['Student ID'] == student_id))
+    ]
+    
+    if not already_reserved.empty:
+        st.warning(f"You have already reserved a spot for seminar '{name}'.")
+        return  # Do not proceed further
+    
+    # Proceed with reservation if not already reserved
     idx = st.session_state.seminars[st.session_state.seminars['Seminar'] == name].index
     if not idx.empty:
         idx = idx[0]
