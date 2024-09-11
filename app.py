@@ -3,6 +3,23 @@ import pandas as pd
 import os
 from datetime import datetime
 
+# Define the path to your image file
+image_path = 'cpe.jpg'
+
+# Set up custom CSS
+st.markdown(
+    f"""
+    <style>
+    .stApp {{
+        background-image: url({image_path});
+        background-size: cover;
+        background-position: center;
+    }}
+    </style>
+    """,
+    unsafe_allow_html=True
+)
+
 st.logo('cpelogo.jpg',icon_image='cpelogo.jpg')
 st.sidebar.image('cpe2.png', use_column_width=True)
 st.sidebar.title('CPE Seminar Reservation')
