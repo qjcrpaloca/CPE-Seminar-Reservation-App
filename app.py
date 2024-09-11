@@ -99,7 +99,7 @@ st.title('Seminar Reservation App')
 if st.session_state.admin_authenticated:
     menu = "Admin"
 else:
-    menu = st.sidebar.selectbox("Menu", ["Guest", "Admin"])
+    menu = st.sidebar.text("Menu", ["Guest", "Admin"])
 
 if menu == "Admin":
     if not st.session_state.admin_authenticated:
