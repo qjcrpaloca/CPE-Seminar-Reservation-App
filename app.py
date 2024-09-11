@@ -10,7 +10,7 @@ def load_seminar_data():
     if os.path.exists(SEMINAR_DATA_FILE):
         return pd.read_csv(SEMINAR_DATA_FILE)
     else:
-        return pd.DataFrame(columns=['Seminar', 'Available Spots', 'Reserved Spots'])
+        return pd.DataFrame(columns=['Seminar', 'Available Spots', 'Reserved Spots', 'Date', 'Time', 'Location'])
 
 # Save seminar data to CSV file
 def save_seminar_data(data):
@@ -23,12 +23,17 @@ if 'seminars' not in st.session_state:
 if 'admin_authenticated' not in st.session_state:
     st.session_state.admin_authenticated = False
 
-def add_seminar(name, spots):
+def add_seminar(name, spots, date, time, location):
     if name and spots > 0:
-        new_seminar = pd.DataFrame([[name, spots, 0]], columns=['Seminar', 'Available Spots', 'Reserved Spots'])
+        new_seminar = pd.DataFrame([[name, spots, 0, date, time, location]], columns=['Seminar', 'Available Spots', 'Reserved Spots', 'Date', 'Time', 'Location'])
         st.session_state.seminars = pd.concat([st.session_state.seminars, new_seminar], ignore_index=True)
         save_seminar_data(st.session_state.seminars)
         st.success(f'Seminar "{name}" added successfully!')
+
+def remove_seminar(name):
+    st.session_state.seminars = st.session_state.seminars[st.session_state.seminars['Seminar'] != name]
+    save_seminar_data(st.session_state.seminars)
+    st.success(f'Seminar "{name}" removed successfully!')
 
 def reserve_spot(name, email, student_id):
     idx = st.session_state.seminars[st.session_state.seminars['Seminar'] == name].index
@@ -68,12 +73,24 @@ if menu == "Admin":
         st.stop()
     
     st.header("Admin Panel")
+    
+    # Adding a seminar
     seminar_name = st.text_input("Seminar Name")
     seminar_spots = st.number_input("Available Spots", min_value=1)
+    seminar_date = st.date_input("Date")
+    seminar_time = st.time_input("Time")
+    seminar_location = st.text_input("Location")
     
     if st.button("Add Seminar"):
-        add_seminar(seminar_name, seminar_spots)
-
+        add_seminar(seminar_name, seminar_spots, seminar_date, seminar_time, seminar_location)
+    
+    # Removing a seminar
+    st.subheader("Remove a Seminar")
+    seminar_to_remove = st.selectbox("Select Seminar to Remove", st.session_state.seminars['Seminar'].tolist())
+    
+    if st.button("Remove Seminar"):
+        remove_seminar(seminar_to_remove)
+    
     st.subheader("Current Seminars")
     st.dataframe(st.session_state.seminars)
 
