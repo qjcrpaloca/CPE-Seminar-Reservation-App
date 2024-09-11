@@ -98,7 +98,8 @@ def authenticate_admin(username, password):
     else:
         st.warning('Incorrect username or password.')
 
-st.title('Seminar Reservation App')
+st.title('CPE Seminar Reservation')
+st.divider()
 
 # Menu selection
 if st.session_state.admin_authenticated:
