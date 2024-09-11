@@ -3,6 +3,7 @@ import pandas as pd
 import os
 from datetime import datetime
 
+st.sidebar.logo('cpe.jpg',icon_image='cpe.jpg')
 st.sidebar.image('cpeeee.jpg', use_column_width=True)
 
 # Define the file paths
