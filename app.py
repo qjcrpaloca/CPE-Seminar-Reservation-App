@@ -58,7 +58,7 @@ def load_seminar_data():
     if os.path.exists(SEMINAR_DATA_FILE):
         return pd.read_csv(SEMINAR_DATA_FILE)
     else:
-        return pd.DataFrame(columns=['Seminar', 'Available Spots', 'Reserved Spots', 'Date', 'Start Time', 'End Time', 'Location'])
+        return pd.DataFrame(columns=[':blue[Seminar]', ':blue[Available Spots]', ':blue[Reserved Spots]', ':blue[Date]', ':blue[Start Time]', ':blue[End Time]', ':blue[Location]'])
 
 # Load reservation data from CSV file
 def load_reservation_data():
