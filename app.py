@@ -1,6 +1,7 @@
 import streamlit as st
 import pandas as pd
 import os
+from datetime import datetime
 
 # Define the file paths
 SEMINAR_DATA_FILE = 'seminars.csv'
@@ -40,6 +41,10 @@ if 'admin_authenticated' not in st.session_state:
 
 if 'menu' not in st.session_state:
     st.session_state.menu = "Guest"  # Default to Guest view
+
+def format_time(time):
+    """Format 24-hour time to 12-hour AM/PM format."""
+    return time.strftime("%I:%M %p")
 
 def add_seminar(name, spots, date, start_time, end_time, location):
     if name and spots > 0:
@@ -110,6 +115,9 @@ if menu == "Admin":
     seminar_start_time = st.time_input("Start Time")
     seminar_end_time = st.time_input("End Time")
     seminar_location = st.text_input("Location")
+    
+    formatted_start_time = format_time(seminar_start_time)
+    formatted_end_time = format_time(seminar_end_time)
     
     if st.button("Add Seminar"):
         add_seminar(seminar_name, seminar_spots, seminar_date, seminar_start_time, seminar_end_time, seminar_location)
