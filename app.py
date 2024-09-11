@@ -4,7 +4,7 @@ import hashlib
 
 # Helper functions
 def load_users():
-    return pd.read_csv('users.csv')
+    return pd.read_csv('users - Sheet1.csv')
 
 def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
