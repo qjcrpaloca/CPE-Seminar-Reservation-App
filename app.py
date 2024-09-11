@@ -9,6 +9,8 @@ page_bg_img = '''
 background-image: url("https://scontent.fcrk3-2.fna.fbcdn.net/v/t39.30808-6/455816550_926358986197698_7998009224246965628_n.jpg?_nc_cat=103&ccb=1-7&_nc_sid=6ee11a&_nc_eui2=AeGmgGAJ-YIQLeX-ZFQq249yv69jAhffUAS_r2MCF99QBKU1mwYrBmx9qSpQ6QUiJkkM-Jl4G7mE8ambWcMK3-qY&_nc_ohc=NzrdNLdsV-cQ7kNvgGLY0f2&_nc_zt=23&_nc_ht=scontent.fcrk3-2.fna&oh=00_AYDl3A89DluBNHNCr3Wo9JyasNb4xL_ahd_GYOcyo5EL4g&oe=66E767DE");
 background-size: cover;
 background-position: center;
+background-repeat: no-repeat;
+background-attachment: fixed;
 }
 </style>
 '''
