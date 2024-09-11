@@ -130,7 +130,7 @@ st.divider()
 if st.session_state.admin_authenticated:
     menu = "Admin"
 else:
-    menu = st.sidebar.selectbox("Menu", ["Guest", "Admin"])
+    menu = st.sidebar.selectbox(":blue[Menu]", ["Guest", "Admin"])
 
 if menu == "Admin":
     if not st.session_state.admin_authenticated:
