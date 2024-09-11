@@ -1,54 +1,50 @@
 import streamlit as st
 import pandas as pd
-import hashlib
 
-# Helper functions
-def load_users():
-    return pd.read_csv('users - Sheet1.csv')
+# Initialize session state for seminar data
+if 'seminars' not in st.session_state:
+    st.session_state.seminars = pd.DataFrame(columns=['Seminar', 'Available Spots', 'Reserved Spots'])
 
-def hash_password(password):
-    return hashlib.sha256(password.encode()).hexdigest()
+def add_seminar(name, spots):
+    if name and spots > 0:
+        new_seminar = pd.DataFrame([[name, spots, 0]], columns=['Seminar', 'Available Spots', 'Reserved Spots'])
+        st.session_state.seminars = pd.concat([st.session_state.seminars, new_seminar], ignore_index=True)
+        st.success(f'Seminar "{name}" added successfully!')
 
-def check_password(stored_password, provided_password):
-    return stored_password == hash_password(provided_password)
-
-def signup(username, password, role):
-    df = load_users()
-    if username in df['username'].values:
-        st.error("Username already exists.")
+def reserve_spot(name):
+    idx = st.session_state.seminars[st.session_state.seminars['Seminar'] == name].index
+    if not idx.empty:
+        idx = idx[0]
+        if st.session_state.seminars.at[idx, 'Available Spots'] > st.session_state.seminars.at[idx, 'Reserved Spots']:
+            st.session_state.seminars.at[idx, 'Reserved Spots'] += 1
+            st.success(f'Reserved a spot for seminar "{name}"!')
+        else:
+            st.warning(f'No available spots for seminar "{name}".')
     else:
-        new_user = pd.DataFrame([[username, hash_password(password), role]], columns=['username', 'password', 'role'])
-        df = pd.concat([df, new_user], ignore_index=True)
-        df.to_csv('users.csv', index=False)
-        st.success("Signup successful! You can now log in.")
+        st.warning(f'Seminar "{name}" not found.')
 
-def login(username, password):
-    df = load_users()
-    user = df[df['username'] == username]
-    if user.empty:
-        st.error("Username not found.")
-    elif check_password(user.iloc[0]['password'], password):
-        st.success(f"Login successful! Welcome {user.iloc[0]['role']}.")
-    else:
-        st.error("Incorrect password.")
+st.title('Seminar Reservation App')
 
-# Streamlit app
-st.title("Login and Signup System")
+menu = st.sidebar.radio("Menu", ["Admin", "Guest"])
 
-menu = ["Login", "Signup"]
-choice = st.sidebar.selectbox("Menu", menu)
+if menu == "Admin":
+    st.header("Admin Panel")
+    seminar_name = st.text_input("Seminar Name")
+    seminar_spots = st.number_input("Available Spots", min_value=1)
+    
+    if st.button("Add Seminar"):
+        add_seminar(seminar_name, seminar_spots)
 
-if choice == "Login":
-    st.subheader("Login Section")
-    username = st.text_input("Username")
-    password = st.text_input("Password", type='password')
-    if st.button("Login"):
-        login(username, password)
+    st.subheader("Current Seminars")
+    st.dataframe(st.session_state.seminars)
 
-elif choice == "Signup":
-    st.subheader("Signup Section")
-    username = st.text_input("Username")
-    password = st.text_input("Password", type='password')
-    role = st.selectbox("Role", ["admin", "user"])
-    if st.button("Signup"):
-        signup(username, password, role)
+elif menu == "Guest":
+    st.header("Reserve a Spot")
+    seminars_list = st.session_state.seminars['Seminar'].tolist()
+    seminar_to_reserve = st.selectbox("Choose a Seminar", seminars_list)
+
+    if st.button("Reserve Spot"):
+        reserve_spot(seminar_to_reserve)
+    
+    st.subheader("Current Seminars")
+    st.dataframe(st.session_state.seminars)
