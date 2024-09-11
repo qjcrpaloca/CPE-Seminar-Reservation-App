@@ -23,6 +23,9 @@ if 'seminars' not in st.session_state:
 if 'admin_authenticated' not in st.session_state:
     st.session_state.admin_authenticated = False
 
+if 'menu' not in st.session_state:
+    st.session_state.menu = "Guest"  # Default to Guest view
+
 def add_seminar(name, spots, date, time, location):
     if name and spots > 0:
         new_seminar = pd.DataFrame([[name, spots, 0, date, time, location, '']], columns=['Seminar', 'Available Spots', 'Reserved Spots', 'Date', 'Time', 'Location', 'Reservations'])
@@ -61,13 +64,20 @@ def authenticate_admin(username, password):
     correct_password = 'password'
     if username == correct_username and password == correct_password:
         st.session_state.admin_authenticated = True
+        st.session_state.menu = "Admin"  # Redirect to Admin Panel
         st.success('Authenticated successfully!')
     else:
         st.warning('Incorrect username or password.')
 
 st.title('Seminar Reservation App')
 
-menu = st.sidebar.radio("Menu", ["Admin", "Guest"])
+# Menu selection
+if st.session_state.menu == "Guest":
+    menu = st.sidebar.radio("Menu", ["Guest"])
+elif st.session_state.menu == "Admin":
+    menu = st.sidebar.radio("Menu", ["Admin"])
+else:
+    menu = st.sidebar.radio("Menu", ["Guest"])
 
 if menu == "Admin":
     if not st.session_state.admin_authenticated:
