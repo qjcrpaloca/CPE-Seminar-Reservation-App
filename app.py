@@ -139,7 +139,7 @@ def authenticate_admin(username, password):
     else:
         st.warning('Incorrect username or password.')
 
-st.title(':orange[CPE Seminar Reservation]')
+st.title(':blue[CPE Seminar Reservation]')
 st.divider()
 
 # Menu selection
@@ -150,15 +150,15 @@ else:
 
 if menu == "Admin":
     if not st.session_state.admin_authenticated:
-        st.header(":orange[CAdmin Login]")
-        username = st.text_input(":orange[CUsername]")
-        password = st.text_input(":orange[CPassword]", type='password')
+        st.header(":blue[CAdmin Login]")
+        username = st.text_input(":blue[CUsername]")
+        password = st.text_input(":blue[CPassword]", type='password')
         
         if st.button(":green[Login]"):
             authenticate_admin(username, password)
         st.stop()
     
-    st.header(":orange[CAdmin Panel]")
+    st.header(":blue[CAdmin Panel]")
     
     # Adding a seminar
     seminar_name = st.text_input("Seminar Name")
@@ -172,14 +172,14 @@ if menu == "Admin":
         add_seminar(seminar_name, seminar_spots, seminar_date, seminar_start_time, seminar_end_time, seminar_location)
     
     # Removing a seminar
-    st.subheader(":orange[CRemove a Seminar]")
+    st.subheader(":blue[CRemove a Seminar]")
     seminar_to_remove = st.selectbox("Select Seminar to Remove", st.session_state.seminars['Seminar'].tolist())
     
     if st.button(":green[CRemove Seminar]"):
         remove_seminar(seminar_to_remove)
     
     # Viewing reservations for a seminar
-    st.subheader(":orange[CView Reservations]")
+    st.subheader(":blue[CView Reservations]")
     seminar_to_view = st.selectbox("Select Seminar to View Reservations", st.session_state.seminars['Seminar'].tolist())
     
     # Filter reservations for the selected seminar
@@ -192,7 +192,7 @@ if menu == "Admin":
         st.write(f"No reservations found for seminar '{seminar_to_view}'.")
 
 elif menu == "Guest":
-    st.header(":orange[Reserve a Spot]")
+    st.header(":blue[Reserve a Spot]")
     seminars_list = st.session_state.seminars['Seminar'].tolist()
     seminar_to_reserve = st.selectbox("Choose a Seminar", seminars_list)
     
@@ -206,7 +206,7 @@ elif menu == "Guest":
             st.warning('Please enter both email and student ID.')
 
     st.divider()
-    st.subheader(":orange[Current Seminars]")
+    st.subheader(":blue[Current Seminars]")
     seminars_df = st.session_state.seminars.copy()
     seminars_df['Start Time'] = pd.to_datetime(seminars_df['Start Time'], format='%H:%M:%S').apply(format_time_12h)
     seminars_df['End Time'] = pd.to_datetime(seminars_df['End Time'], format='%H:%M:%S').apply(format_time_12h)
